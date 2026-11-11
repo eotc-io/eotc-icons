@@ -93,16 +93,25 @@ Both run from GitHub Actions once set up.
 
 - Workflow: `.github/workflows/release.yml`
 
-Pushing a version tag publishes the package, with
-[provenance](https://docs.npmjs.com/generating-provenance-statements).
+Releases use npm's [staged publishing](https://docs.npmjs.com/staged-publishing):
+CI only stages a version, and it goes live when a maintainer approves it with
+2FA. No npm token is stored anywhere.
 
 1. Bump `version` in `package.json` and commit.
-2. `git tag v0.1.0 && git push origin v0.1.0` (the tag must match the
-   version).
+2. `git tag v0.2.0 && git push origin v0.2.0` (the tag must match the
+   version). The workflow tests the package and stages it, with provenance.
+3. On npmjs.com, open the package's **Staged Packages** tab, review the
+   version and **Approve** it (or run `npm stage approve <stage-id>`).
 
-One-time setup: on npmjs.com create a granular access token that can publish
-`eotc-icons` (for the very first release, one that can publish new packages),
-and add it to the repo as the Actions secret `NPM_TOKEN`.
+One-time setup (needs 2FA on your npm account and npm 11.15.0 or newer):
+
+1. Stage the first release from your machine: `pnpm test`, then
+   `npm stage publish --access public`, and approve it on npmjs.com. This
+   creates the package (npm shows a `0.0.0-stage` placeholder until you
+   approve).
+2. In the package's settings on npmjs.com, add a trusted publisher: GitHub
+   Actions, repository `eotc-io/eotc-icons`, workflow `release.yml`, allowed
+   to stage only.
 
 ### icons.eotc.io
 
