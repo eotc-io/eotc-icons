@@ -87,10 +87,36 @@ Every icon in `svg/` is checked by the build:
 
 ## Publishing
 
-- **npm:** bump `version`, then `pnpm publish` (the build and tests run first).
-- **icons.eotc.io:** a static site. Build with `pnpm site` and serve
-  `site/dist` (on Cloudflare Pages: build command `pnpm site`, output
-  directory `site/dist`).
+Both run from GitHub Actions once set up.
+
+### npm (`.github/workflows/release.yml`)
+
+Pushing a version tag publishes the package, with
+[provenance](https://docs.npmjs.com/generating-provenance-statements).
+
+1. Bump `version` in `package.json` and commit.
+2. `git tag v0.1.0 && git push origin v0.1.0` (the tag must match the
+   version).
+
+One-time setup: on npmjs.com create a granular access token that can publish
+`eotc-icons` (for the very first release, one that can publish new packages),
+and add it to the repo as the Actions secret `NPM_TOKEN`.
+
+### icons.eotc.io (`.github/workflows/site.yml`)
+
+Every push to `main` builds the site (`pnpm site`) and deploys `site/dist`
+to Cloudflare Pages.
+
+One-time setup:
+
+1. In Cloudflare, create a Pages project named `eotc-icons` (Workers & Pages
+   → Create → Pages → Direct Upload).
+2. Create an API token with the **Cloudflare Pages: Edit** permission, and
+   add it to the repo as the Actions secret `CLOUDFLARE_API_TOKEN`; add your
+   account ID as `CLOUDFLARE_ACCOUNT_ID`.
+3. In the Pages project, add the custom domain `icons.eotc.io`.
+
+To look at the site locally: `pnpm site`, then open `site/dist/index.html`.
 
 ## License
 
