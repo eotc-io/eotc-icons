@@ -1,0 +1,4 @@
+dist/
+site/dist/
+svg/
+pnpm-lock.yaml
