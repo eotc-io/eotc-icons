@@ -1,0 +1,40 @@
+name: Release
+
+# Stages a release on npm when a version tag is pushed (v0.1.0, v0.2.0, ...).
+# Nothing goes live from here: the staged version waits under the package's
+# Staged Packages tab on npmjs.com until a maintainer approves it with 2FA.
+#
+# No npm token is stored: the workflow proves itself to npm with GitHub's
+# OIDC token (trusted publishing, set to allow staging only), and the release
+# carries provenance linking it to this repo and run. The tag must match
+# package.json.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  id-token: write # trusted publishing and provenance
+
+jobs:
+  stage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      # Staged publishing needs npm 11.15.0 or newer.
+      - run: npm install -g npm@^11.15.0
+      - run: pnpm install --frozen-lockfile
+      - name: Check the tag matches package.json
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          if [ "${GITHUB_REF_NAME}" != "v${version}" ]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match package.json version ${version}" >&2
+            exit 1
+          fi
+      - run: pnpm test
+      - run: npm stage publish --provenance --access public

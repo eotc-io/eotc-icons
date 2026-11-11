@@ -1,0 +1,75 @@
+{
+  "name": "eotc-icons",
+  "version": "0.1.0",
+  "description": "The eotc-io collection of icons for web and mobile: one hand-drawn set on a 24-point grid, for React, React Native and plain SVG.",
+  "license": "MIT",
+  "homepage": "https://icons.eotc.io",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eotc-io/eotc-icons.git"
+  },
+  "bugs": {
+    "url": "https://github.com/eotc-io/eotc-icons/issues"
+  },
+  "keywords": [
+    "icons",
+    "svg",
+    "react",
+    "react-native",
+    "ethiopian",
+    "orthodox",
+    "church"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "default": "./dist/react.js"
+    },
+    "./native": {
+      "types": "./dist/native.d.ts",
+      "default": "./dist/native.js"
+    },
+    "./svg/*": "./svg/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "svg"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "site": "node scripts/build.mjs && node scripts/site.mjs",
+    "test": "node scripts/build.mjs && node --test \"test/**/*.test.mjs\"",
+    "prepublishOnly": "node scripts/build.mjs && node --test \"test/**/*.test.mjs\"",
+    "format": "prettier . --write"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-native-svg": ">=13"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-native-svg": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "prettier": "3.9.9"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@12.6.0"
+}
