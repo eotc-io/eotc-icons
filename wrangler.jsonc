@@ -1,0 +1,10 @@
+// icons.eotc.io: a Worker that serves the static site built into site/dist
+// (`pnpm site`). Cloudflare builds and deploys it from GitHub on every push
+// to main; see docs/publishing.md.
+{
+  "name": "eotc-icons",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./site/dist",
+  },
+}

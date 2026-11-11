@@ -1,6 +1,7 @@
 # Publishing
 
-Both run from GitHub Actions once set up.
+The package is released from GitHub Actions; the site is built and deployed
+by Cloudflare.
 
 ## npm
 
@@ -28,18 +29,25 @@ One-time setup (needs 2FA on your npm account and npm 11.15.0 or newer):
 
 ## icons.eotc.io
 
-- Workflow: `.github/workflows/site.yml`
+- Config: `wrangler.jsonc`
 
-Every push to `main` builds the site (`pnpm site`) and deploys `site/dist`
-to Cloudflare Pages.
+Cloudflare builds and deploys the site from GitHub on every push to `main`
+(Workers Builds): it runs `pnpm site` and serves `site/dist` from a Worker.
+No workflow or token lives in this repo.
 
 One-time setup:
 
-1. In Cloudflare, create a Pages project named `eotc-icons` (Workers & Pages
-   → Create → Pages → Direct Upload).
-2. Create an API token with the **Cloudflare Pages: Edit** permission, and
-   add it to the repo as the Actions secret `CLOUDFLARE_API_TOKEN`; add your
-   account ID as `CLOUDFLARE_ACCOUNT_ID`.
-3. In the Pages project, add the custom domain `icons.eotc.io`.
+1. In Cloudflare, go to **Workers & Pages → Create → Import a repository**,
+   connect GitHub and pick `eotc-io/eotc-icons`.
+2. Set the **build command** to `pnpm site` and leave the **deploy command**
+   as `npx wrangler deploy` (it reads `wrangler.jsonc`). The production
+   branch is `main`.
+3. In the Worker's **Settings → Domains & Routes**, add the custom domain
+   `icons.eotc.io`.
+
+Node comes from `.node-version` and pnpm from `packageManager` in
+`package.json`. If the first build log shows another pnpm version or an
+install error, set the build command to
+`corepack enable && pnpm install --frozen-lockfile && pnpm site`.
 
 To look at the site locally: `pnpm site`, then open `site/dist/index.html`.
