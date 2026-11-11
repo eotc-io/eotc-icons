@@ -89,7 +89,9 @@ Every icon in `svg/` is checked by the build:
 
 Both run from GitHub Actions once set up.
 
-### npm (`.github/workflows/release.yml`)
+### npm
+
+- Workflow: `.github/workflows/release.yml`
 
 Pushing a version tag publishes the package, with
 [provenance](https://docs.npmjs.com/generating-provenance-statements).
@@ -102,7 +104,9 @@ One-time setup: on npmjs.com create a granular access token that can publish
 `eotc-icons` (for the very first release, one that can publish new packages),
 and add it to the repo as the Actions secret `NPM_TOKEN`.
 
-### icons.eotc.io (`.github/workflows/site.yml`)
+### icons.eotc.io
+
+- Workflow: `.github/workflows/site.yml`
 
 Every push to `main` builds the site (`pnpm site`) and deploys `site/dist`
 to Cloudflare Pages.
